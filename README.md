@@ -1,4 +1,4 @@
-# ROS configuration and launch files for Neobotix MP-400
+# ROS 2 configuration and launch files for Neobotix MP-400
 
 This package contains configuration and launch files for Neobotix MP-400.
 
@@ -8,7 +8,7 @@ The [MP-400](https://www.neobotix-robots.com/mobile-robot-mp-400.html) is a smal
 
 # Documentation
 
-Please find our documentations at https://docs.neobotix.de/
+Coming soon! 
 
 # Contact information
 

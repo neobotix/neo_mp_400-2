@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<profiles> 
+    <participant profile_name="client" is_default_profile="true"> 
+        <rtps> 
+            <builtin> 
+                <metatrafficMulticastLocatorList> 
+                    <locator/> 
+                </metatrafficMulticastLocatorList> 
+                <initialPeersList> 
+                    <locator> 
+						<udpv4>
+                        	<address>10.1.x.x</address> 
+						</udpv4>                    
+					</locator> 
+                    <locator> 
+						<udpv4>
+                        	<address>10.1.x.x</address> 
+						</udpv4>                    
+					</locator> 
+                </initialPeersList> 
+            </builtin> 
+        </rtps> 
+    </participant> 
+</profiles>
