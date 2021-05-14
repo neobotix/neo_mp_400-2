@@ -9,8 +9,8 @@ from launch.actions import DeclareLaunchArgument
 
 def generate_launch_description():
 
-    config = os.path.join(get_package_share_directory('neo_mp_400'),'configs/lidar/sick/s300','s300_1.yaml')
-    config1 = os.path.join(get_package_share_directory('neo_mp_400'),'configs/lidar/sick/s300','s300_filter.yaml')
+    config = os.path.join(get_package_share_directory('neo_mp_400-2'),'configs/lidar/sick/s300','s300_1.yaml')
+    config1 = os.path.join(get_package_share_directory('neo_mp_400-2'),'configs/lidar/sick/s300','s300_filter.yaml')
 
 
     return launch.LaunchDescription([
