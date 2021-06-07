@@ -1,7 +1,7 @@
 neo_relayboard_node:
   ros__parameters:
     port: /dev/ttyUSB0
-    request_rate: 50
+    request_rate: 50.0
     motor_delay: 0.015
 
     #################################################
