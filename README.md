@@ -8,7 +8,7 @@ The [MP-400](https://www.neobotix-robots.com/mobile-robot-mp-400.html) is a smal
 
 # Documentation
 
-Coming soon! 
+https://neobotix-docs.de/ros/ros2/index.html
 
 # Contact information
 
