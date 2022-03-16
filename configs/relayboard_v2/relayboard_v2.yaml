@@ -3,6 +3,9 @@ neo_relayboard_node:
     port: /dev/ttyUSB0
     request_rate: 50.0
     motor_delay: 0.015
+    number_of_drives: 2
+    Publish_joint_states: false
+    trajectory_timeout: 1.0
 
     #################################################
     #                 battery                       #
@@ -19,7 +22,7 @@ neo_relayboard_node:
     battery:
       serial_number: neobattery1
       location: slot1
-      design_capacity: 100
+      design_capacity: 100.0
       chemistry: 1
 
 
