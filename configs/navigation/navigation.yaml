@@ -1,3 +1,74 @@
+neo_localization2_node:
+  ros__parameters:
+    base_frame: "base_footprint"
+    odom_frame: "odom"
+    # exponential low pass gain for localization update (0 to 1)
+    #   (higher gain means odometry is less used / relied on)
+    update_gain: 0.5
+    # time based confidence gain when in 2D / 1D mode
+    confidence_gain: 0.01
+    # how many particles (samples) to spread (per update)
+    sample_rate: 10
+    # localization update rate [ms]
+    loc_update_time: 100
+    # map tile update rate [1/s]
+    map_update_rate: 0.5
+    # map tile size in pixels
+    map_size: 1000
+    # how often to downscale (half) the original map
+    map_downscale: 0
+    # how many 3x3 gaussian smoothing iterations are applied to the map
+    num_smooth: 5
+    # minimum score for valid localization (otherwise 0D mode)
+    #    higher values make it go into 0D mode earlier
+    min_score: 0.2
+    # odometry error in x and y [m/m] [1]
+    #    how fast to increase particle spread when in 1D / 0D mode
+    odometry_std_xy: 0.01
+    # odometry error in yaw angle [rad/rad] [1]
+    #  how fast to increase particle spread when in 0D mode
+    odometry_std_yaw: 0.01
+    # minimum particle spread in x and y [m]
+    min_sample_std_xy: 0.025
+    # minimum particle spread in yaw angle [rad]
+    min_sample_std_yaw: 0.025
+    # initial/maximum particle spread in x and y [m]
+    max_sample_std_xy: 0.5
+    # initial/maximum particle spread in yaw angle [rad]
+    max_sample_std_yaw: 0.5
+    # threshold for 1D / 2D decision making (minimum average second order gradient)
+    # if worst gradient direction is below this value we go into 1D mode
+    # if both gradient directions are below we may go into 0D mode, depending on disable_threshold
+    # higher values will make it go into 1D / 0D mode earlier
+    constrain_threshold: 0.1
+    # threshold for 1D / 2D decision making (with or without orientation)
+    #   higher values will make it go into 1D mode earlier
+    constrain_threshold_yaw: 0.2
+    # minimum number of points per update
+    min_points: 20
+    # solver update gain, lower gain = more stability / slower convergence
+    solver_gain: 0.1
+    # solver update damping, higher damping = more stability / slower convergence
+    solver_damping: 1000.0
+    # number of gauss-newton iterations per sample per scan
+    solver_iterations: 20
+    # maximum wait for getting transforms [s]
+    transform_timeout: 0.2
+    # if to broadcast map frame
+    broadcast_tf: true
+    # Scan topic - feel free to use topic /scan if you have 2 laser scanners
+    scan_topic: "lidar_1/scan_filtered"
+    # Initial Pose topic
+    initialpose: initialpose
+    # Map Tile topic
+    map_tile: map_tile
+    # Map Pose topic
+    map_pose: map_pose
+    # particle_cloud topic
+    particle_cloud: particlecloud
+    # amcl_pose topic
+    amcl_pose: amcl_pose
+
 amcl:
   ros__parameters:
     use_sim_time: False
@@ -46,32 +117,56 @@ bt_navigator:
     global_frame: map
     robot_base_frame: base_link
     odom_topic: /odom
-    default_nav_to_pose_bt_xml: "../behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml"
-    default_nav_through_poses_bt_xml: "../behavior_trees/navigate_through_poses_w_replanning_and_recovery.xml"
+    bt_loop_duration: 10
+    # default_nav_to_pose_bt_xml: "/home/USER/mpo_700_workspace/src/neo_mpo_700-2/configs/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml"
+    # default_nav_through_poses_bt_xml: "/home/USER/mpo_700_workspace/src/neo_mpo_700-2/configs/behavior_trees/navigate_through_poses_w_replanning_and_recovery.xml"
+    default_server_timeout: 20
+    groot_zmq_publisher_port: 1666
+    groot_zmq_server_port: 1667
     plugin_lib_names:
     - nav2_compute_path_to_pose_action_bt_node
+    - nav2_compute_path_through_poses_action_bt_node
+    - nav2_smooth_path_action_bt_node
     - nav2_follow_path_action_bt_node
-    - nav2_back_up_action_bt_node
     - nav2_spin_action_bt_node
     - nav2_wait_action_bt_node
+    - nav2_back_up_action_bt_node
+    - nav2_drive_on_heading_bt_node
     - nav2_clear_costmap_service_bt_node
     - nav2_is_stuck_condition_bt_node
     - nav2_goal_reached_condition_bt_node
     - nav2_goal_updated_condition_bt_node
+    - nav2_globally_updated_goal_condition_bt_node
+    - nav2_is_path_valid_condition_bt_node
     - nav2_initial_pose_received_condition_bt_node
     - nav2_reinitialize_global_localization_service_bt_node
     - nav2_rate_controller_bt_node
     - nav2_distance_controller_bt_node
     - nav2_speed_controller_bt_node
     - nav2_truncate_path_action_bt_node
+    - nav2_truncate_path_local_action_bt_node
     - nav2_goal_updater_node_bt_node
     - nav2_recovery_node_bt_node
     - nav2_pipeline_sequence_bt_node
     - nav2_round_robin_node_bt_node
     - nav2_transform_available_condition_bt_node
     - nav2_time_expired_condition_bt_node
+    - nav2_path_expiring_timer_condition
     - nav2_distance_traveled_condition_bt_node
-
+    - nav2_single_trigger_bt_node
+    - nav2_is_battery_low_condition_bt_node
+    - nav2_navigate_through_poses_action_bt_node
+    - nav2_navigate_to_pose_action_bt_node
+    - nav2_remove_passed_goals_action_bt_node
+    - nav2_planner_selector_bt_node
+    - nav2_controller_selector_bt_node
+    - nav2_goal_checker_selector_bt_node
+    - nav2_controller_cancel_bt_node
+    - nav2_path_longer_on_approach_bt_node
+    - nav2_wait_cancel_bt_node
+    - nav2_spin_cancel_bt_node
+    - nav2_back_up_cancel_bt_node
+    - nav2_drive_on_heading_cancel_bt_node
 
 controller_server:
   ros__parameters:
@@ -81,19 +176,19 @@ controller_server:
     min_x_velocity_threshold: 0.001
     min_y_velocity_threshold: 0.5
     min_theta_velocity_threshold: 0.001
-    progress_checker_plugin: "progress_checker"
-    goal_checker_plugin: "goal_checker"
     controller_plugins: ["FollowPath"]
+    goal_checker_plugins: ["general_goal_checker"]
+    progress_checker_plugin: "progress_checker"
     progress_checker:
       plugin: "nav2_controller::SimpleProgressChecker"
       required_movement_radius: 0.5
-      movement_time_allowance: 10.0
-    goal_checker:
+      movement_time_allowance: 100.0
+    general_goal_checker:
       plugin: "nav2_controller::SimpleGoalChecker"
-      xy_goal_tolerance: 0.25
-      yaw_goal_tolerance: 0.25
+      xy_goal_tolerance: 0.05
+      yaw_goal_tolerance: 0.05
       stateful: True
-    # DWB controller parameters
+    # neo_local_planner controller parameters
     FollowPath:
       plugin: "neo_local_planner::NeoLocalPlanner"
       # The x acceleration limit of the robot in meters/sec^2
@@ -171,48 +266,17 @@ local_costmap:
       height: 5
       resolution: 0.02
       # robot_radius: 0.22
-      plugins: ["voxel_layer", "inflation_layer", "obstacle_layer"]
+      plugins: ["inflation_layer", "obstacle_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 5.0
         inflation_radius: 0.8
-      voxel_layer:
-        plugin: "nav2_costmap_2d::VoxelLayer"
-        enabled: True
-        publish_voxel_map: True
-        origin_z: 0.0
-        z_resolution: 0.02
-        z_voxels: 10
-        max_obstacle_height: 2.0
-        mark_threshold: 0
-        observation_sources: scan scan1
-        scan:
-          topic: /lidar_1/scan_filtered
-          max_obstacle_height: 2.0
-          clearing: True
-          marking: True
-          data_type: "LaserScan"
-        scan1:
-          topic: /lidar_2/scan_filtered
-          max_obstacle_height: 2.0
-          clearing: True
-          marking: True
-          data_type: "LaserScan"
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
-        observation_sources: scan scan1
+        observation_sources: scan
         scan:
           topic: /lidar_1/scan_filtered
-          obstacle_max_range: 5.0
-          obstacle_min_range: 0.0
-          raytrace_max_range: 8.0
-          raytrace_min_range: 0.0
-          clearing: True
-          marking: True
-          data_type: "LaserScan"
-        scan1:
-          topic: /lidar_2/scan_filtered
           obstacle_max_range: 5.0
           obstacle_min_range: 0.0
           raytrace_max_range: 8.0
@@ -223,12 +287,6 @@ local_costmap:
       static_layer:
         map_subscribe_transient_local: False
       always_send_full_costmap: True
-  local_costmap_client:
-    ros__parameters:
-      use_sim_time: False
-  local_costmap_rclcpp_node:
-    ros__parameters:
-      use_sim_time: False
 
 global_costmap:
   global_costmap:
@@ -242,7 +300,7 @@ global_costmap:
       use_sim_time: False
       # robot_radius: 0.22
       resolution: 0.05
-      plugins: ["static_layer", "obstacle_layer","voxel_layer", "inflation_layer"]
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
@@ -274,29 +332,6 @@ global_costmap:
         cost_scaling_factor: 4.5
         inflation_radius: 0.8
       always_send_full_costmap: True
-      voxel_layer:
-        plugin: "nav2_costmap_2d::VoxelLayer"
-        enabled: True
-        publish_voxel_map: True
-        observation_sources: scan scan1
-        scan:
-          topic: /lidar_1/scan_filtered
-          max_obstacle_height: 2.0
-          clearing: True
-          marking: False
-          data_type: "LaserScan"
-        scan1:
-          topic: /lidar_2/scan_filtered
-          max_obstacle_height: 2.0
-          clearing: True
-          marking: False
-          data_type: "LaserScan"
-  global_costmap_client:
-    ros__parameters:
-      use_sim_time: False
-  global_costmap_rclcpp_node:
-    ros__parameters:
-      use_sim_time: False
 
 map_server:
   ros__parameters:
@@ -322,31 +357,33 @@ planner_server:
       use_astar: false
       allow_unknown: true
 
-planner_server_rclcpp_node:
-  ros__parameters:
-    use_sim_time: False
-
-recoveries_server:
+behavior_server:
   ros__parameters:
     costmap_topic: local_costmap/costmap_raw
     footprint_topic: local_costmap/published_footprint
     cycle_frequency: 10.0
-    recovery_plugins: ["spin", "back_up", "wait"]
+    behavior_plugins: ["spin", "backup", "wait"]
     spin:
-      plugin: "nav2_recoveries/Spin"
-    back_up:
-      plugin: "nav2_recoveries/BackUp"
+      plugin: "nav2_behaviors/Spin"
+    backup:
+      plugin: "nav2_behaviors/BackUp"
     wait:
-      plugin: "nav2_recoveries/Wait"
+      plugin: "nav2_behaviors/Wait"
     global_frame: odom
     robot_base_frame: base_link
     transform_timeout: 0.1
-    use_sim_time: False
+    use_sim_time: true
     simulate_ahead_time: 2.0
-    max_rotational_vel: 0.6
-    min_rotational_vel: 0.4
-    rotational_acc_lim: 3.2
+    max_rotational_vel: 0.5
+    min_rotational_vel: 0.3
+    rotational_acc_lim: 0.8
 
-robot_state_publisher:
+waypoint_follower:
   ros__parameters:
-    use_sim_time: True
+    loop_rate: 20
+    stop_on_failure: false
+    waypoint_task_executor_plugin: "wait_at_waypoint"   
+    wait_at_waypoint:
+      plugin: "nav2_waypoint_follower::WaitAtWaypoint"
+      enabled: True
+      waypoint_pause_duration: 200
