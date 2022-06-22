@@ -264,9 +264,9 @@ local_costmap:
       rolling_window: true
       width: 5
       height: 5
-      resolution: 0.02
+      resolution: 0.03
       # robot_radius: 0.22
-      plugins: ["inflation_layer", "obstacle_layer"]
+      plugins: ["obstacle_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 5.0
@@ -274,18 +274,13 @@ local_costmap:
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
-        observation_sources: scan
+        observation_sources: scan scan1
         scan:
           topic: /lidar_1/scan_filtered
-          obstacle_max_range: 5.0
-          obstacle_min_range: 0.0
-          raytrace_max_range: 8.0
-          raytrace_min_range: 0.0
+          max_obstacle_height: 2.0
           clearing: True
           marking: True
           data_type: "LaserScan"
-      static_layer:
-        map_subscribe_transient_local: False
       always_send_full_costmap: True
 
 global_costmap:
