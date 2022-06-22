@@ -4,7 +4,7 @@ neo_relayboard_node:
     request_rate: 50.0
     motor_delay: 0.015
     number_of_drives: 2
-    Publish_joint_states: false
+    Publish_joint_states: true
     trajectory_timeout: 1.0
 
     #################################################
