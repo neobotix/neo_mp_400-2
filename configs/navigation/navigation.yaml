@@ -209,7 +209,7 @@ controller_server:
       # The absolute value of the minimum translational velocity for the robot in m/s
       min_trans_vel : 0.1
       # The tolerance in radians for the controller in yaw/rotation when achieving its goal
-      yaw_goal_tolerance : 0.01
+      yaw_goal_tolerance : 0.05
       # The tolerance in meters for the controller in the x & y distance when achieving a goal
       xy_goal_tolerance : 0.1
       # How long to fine tune for goal position after reaching tolerance limits [s]
