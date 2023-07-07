@@ -357,11 +357,7 @@ behavior_server:
     costmap_topic: local_costmap/costmap_raw
     footprint_topic: local_costmap/published_footprint
     cycle_frequency: 10.0
-    behavior_plugins: ["spin", "backup", "wait"]
-    spin:
-      plugin: "nav2_behaviors/Spin"
-    backup:
-      plugin: "nav2_behaviors/BackUp"
+    behavior_plugins: ["wait"]
     wait:
       plugin: "nav2_behaviors/Wait"
     global_frame: odom
@@ -369,9 +365,6 @@ behavior_server:
     transform_timeout: 0.1
     use_sim_time: true
     simulate_ahead_time: 2.0
-    max_rotational_vel: 0.5
-    min_rotational_vel: 0.3
-    rotational_acc_lim: 0.8
 
 waypoint_follower:
   ros__parameters:
