@@ -263,6 +263,10 @@ controller_server:
       min_stop_dist : 0.3
       # If robot has differential drive, holonomic otherwise
       differential_drive : true
+      # odom frame_id
+      local_frame: "odom"
+      # base frame_id
+      base_frame: "base_link"
 
 local_costmap:
   local_costmap:
@@ -271,6 +275,7 @@ local_costmap:
       publish_frequency: 1.0
       global_frame: robot1odom
       robot_base_frame: robot1base_link
+      map_topic: map
       footprint_padding: 0.
       footprint:  "[ [0.30,0.30],[-0.30,0.30],[-0.30,-0.3],[0.30,-0.3] ]"
       use_sim_time: False
