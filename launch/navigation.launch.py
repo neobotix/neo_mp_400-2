@@ -77,7 +77,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource([neo_docking2, '/docking_launch.py']),
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time}.items(),
-            condition=IfCondition(LaunchConfiguration('enable_docking')))
+            condition=IfCondition(docking))
     ])
 
     # Start map_server if this robot is assigned as the head robot and if there is no multi-robot,
