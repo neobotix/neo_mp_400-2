@@ -361,10 +361,6 @@ behavior_server:
     footprint_topic: /robot1/local_costmap/published_footprint
     cycle_frequency: 10.0
     behavior_plugins: ["wait"]
-    spin:
-      plugin: "nav2_behaviors/Spin"
-    backup:
-      plugin: "nav2_behaviors/BackUp"
     wait:
       plugin: "nav2_behaviors/Wait"
     global_frame: robot1/odom
