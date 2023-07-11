@@ -4,4 +4,5 @@
     wheelDiameter: 0.15
     robotLength: 0.5
     robotWidth: 0.529
-
+    odomFrame: "odom"
+    robotBaseFrame: "base_link"
