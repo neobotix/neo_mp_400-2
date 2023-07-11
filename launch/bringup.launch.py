@@ -20,13 +20,17 @@ def generate_launch_description():
     with open(urdf, 'r') as infp:  
         robot_desc = infp.read() # Dummy to use parameter instead of using argument=[urdf] in Node. Reference page: https://github.com/ros2/demos/pull/426/commits/a35a25732159e4c8b5655755ce31ec4c3e6e7975
 
+    rp_ns = ""
+    if (robot_namespace.perform(context) != "/"):
+        rp_ns = robot_namespace.perform(context) + "/"
+
     start_robot_state_publisher_cmd = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name='robot_state_publisher',
         output='screen',
         namespace=robot_namespace,
-        parameters=[{'robot_description': robot_desc, 'frame_prefix': robot_namespace.perform(context) + "/"}],
+        parameters=[{'robot_description': robot_desc, 'frame_prefix': rp_ns}],
         arguments=[urdf])
 
     relayboard = IncludeLaunchDescription(

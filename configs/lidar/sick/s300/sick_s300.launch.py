@@ -23,14 +23,14 @@ def generate_launch_description():
 
      launch_ros.actions.Node(
             package='neo_sick_s300-2', 
-            namespace = robot_namespace.perform(context) + "lidar_1", 
+            namespace = robot_namespace.perform(context) + "/lidar_1", 
             executable='neo_sick_s300_node', output='screen',
             name='neo_sick_s300_node', 
             parameters = [config])
     ,
      launch_ros.actions.Node(
             package='neo_sick_s300-2',
-            namespace = robot_namespace.perform(context) + 'lidar_1',
+            namespace = robot_namespace.perform(context) + '/lidar_1',
             executable='neo_scan_filter_node', output='screen',
             name='neo_scan_filter_node',
             parameters = [config1]),
