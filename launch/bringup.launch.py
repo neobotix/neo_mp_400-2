@@ -13,7 +13,7 @@ from pathlib import Path
 
 def generate_launch_description():
     neo_mp_400 = get_package_share_directory('neo_mp_400-2')
-    robot_namespace = LaunchConfiguration('robot_namespace', default='robot1')
+    robot_namespace = LaunchConfiguration('robot_namespace', default='')
     urdf = os.path.join(get_package_share_directory('neo_mp_400-2'), 'robot_model/mp_400', 'mp_400.urdf')
     context = LaunchContext()
 
