@@ -14,6 +14,7 @@ from launch.conditions import IfCondition
 
 def generate_launch_description():
     use_multi_robots = LaunchConfiguration('use_multi_robots', default='False')
+    docking = LaunchConfiguration('enable_docking', default='False')
     head_robot = LaunchConfiguration('head_robot', default='False')
     use_amcl = LaunchConfiguration('use_amcl', default='False')
     use_sim_time = LaunchConfiguration('use_sim_time', default='False')
@@ -35,6 +36,8 @@ def generate_launch_description():
             param_file_name))
 
     nav2_launch_file_dir = os.path.join(get_package_share_directory('neo_nav2_bringup'), 'launch')
+
+    neo_docking2 = os.path.join(get_package_share_directory('neo_docking2'), 'launch')
 
     ld = LaunchDescription()
 
@@ -69,6 +72,12 @@ def generate_launch_description():
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time,
                               'params_file': param_dir}.items()),
+
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([neo_docking2, '/docking_launch.py']),
+            launch_arguments={'namespace': namespace,
+                              'use_sim_time': use_sim_time}.items(),
+            condition=IfCondition(docking))
     ])
 
     # Start map_server if this robot is assigned as the head robot and if there is no multi-robot,
