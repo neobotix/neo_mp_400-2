@@ -1,7 +1,7 @@
 neo_localization2_node:
   ros__parameters:
-    base_frame: "base_footprint"
-    odom_frame: "odom"
+    base_frame: "/base_footprint"
+    odom_frame: "/odom"
     # exponential low pass gain for localization update (0 to 1)
     #   (higher gain means odometry is less used / relied on)
     update_gain: 0.5
@@ -122,11 +122,11 @@ bt_navigator:
   ros__parameters:
     use_sim_time: False
     global_frame: map
-    robot_base_frame: robot1base_link
+    robot_base_frame: robot1/base_link
     odom_topic: /robot1/odom
     bt_loop_duration: 10
-    # default_nav_to_pose_bt_xml: "/home/neobotix/mp_400_workspace/src/neo_mp_400-2/configs/navigation/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml"
-    # default_nav_through_poses_bt_xml: "/home/neobotix/mp_400_workspace/src/neo_mp_400-2/configs/navigation/behavior_trees/navigate_through_poses_w_replanning_and_recovery.xml"
+    default_nav_to_pose_bt_xml: "/home/neobotix/mp_400_workspace/src/neo_mp_400-2/configs/navigation/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml"
+    default_nav_through_poses_bt_xml: "/home/neobotix/mp_400_workspace/src/neo_mp_400-2/configs/navigation/behavior_trees/navigate_through_poses_w_replanning_and_recovery.xml"
     default_server_timeout: 20
     groot_zmq_publisher_port: 1666
     groot_zmq_server_port: 1667
@@ -264,17 +264,17 @@ controller_server:
       # If robot has differential drive, holonomic otherwise
       differential_drive : true
       # odom frame_id
-      local_frame: "odom"
+      local_frame: "/odom"
       # base frame_id
-      base_frame: "base_link"
+      base_frame: "/base_link"
 
 local_costmap:
   local_costmap:
     ros__parameters:
       update_frequency: 10.0
       publish_frequency: 1.0
-      global_frame: robot1odom
-      robot_base_frame: robot1base_link
+      global_frame: robot1/odom
+      robot_base_frame: robot1/base_link
       footprint_padding: 0.
       footprint:  "[ [0.30,0.30],[-0.30,0.30],[-0.30,-0.3],[0.30,-0.3] ]"
       use_sim_time: False
@@ -306,7 +306,7 @@ global_costmap:
       update_frequency: 0.4
       publish_frequency: 1.0
       global_frame: map
-      robot_base_frame: robot1base_link
+      robot_base_frame: robot1/base_link
       map_topic: /map
       footprint_padding: 0.0
       footprint:  "[ [0.30,0.30],[-0.30,0.30],[-0.30,-0.3],[0.30,-0.3] ]"
@@ -367,14 +367,10 @@ behavior_server:
     footprint_topic: /robot1/local_costmap/published_footprint
     cycle_frequency: 10.0
     behavior_plugins: ["wait"]
-    spin:
-      plugin: "nav2_behaviors/Spin"
-    backup:
-      plugin: "nav2_behaviors/BackUp"
     wait:
       plugin: "nav2_behaviors/Wait"
-    global_frame: robot1odom
-    robot_base_frame: robot1base_link
+    global_frame: robot1/odom
+    robot_base_frame: robot1/base_link
     transform_timeout: 0.1
     simulate_ahead_time: 2.0
 
