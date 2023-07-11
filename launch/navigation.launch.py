@@ -72,7 +72,7 @@ def generate_launch_description():
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time,
                               'params_file': param_dir}.items()),
-        
+
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([neo_docking2, '/docking_launch.py']),
             launch_arguments={'namespace': namespace,
