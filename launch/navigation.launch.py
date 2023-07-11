@@ -35,6 +35,14 @@ def generate_launch_description():
             'configs/navigation',
             param_file_name))
 
+    docking_param_file_name = 'docking_navigation.yaml'
+    docking_param_dir = LaunchConfiguration(
+        'params_file',
+        default=os.path.join(
+            get_package_share_directory('neo_mp_400-2'),
+            'configs/navigation',
+            docking_param_file_name))
+
     nav2_launch_file_dir = os.path.join(get_package_share_directory('neo_nav2_bringup'), 'launch')
 
     neo_docking2 = os.path.join(get_package_share_directory('neo_docking2'), 'launch')
@@ -69,15 +77,24 @@ def generate_launch_description():
 
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([nav2_launch_file_dir, '/navigation_neo.launch.py']),
+            condition=IfCondition(PythonExpression(['not ', docking])),
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time,
                               'params_file': param_dir}.items()),
 
         IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([nav2_launch_file_dir, '/navigation_neo.launch.py']),
+            condition=IfCondition(docking),
+            launch_arguments={'namespace': namespace,
+                              'use_sim_time': use_sim_time,
+                              'params_file': docking_param_dir}.items()),
+
+        IncludeLaunchDescription(
             PythonLaunchDescriptionSource([neo_docking2, '/docking_launch.py']),
+            condition=IfCondition(docking),
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time}.items(),
-            condition=IfCondition(docking))
+        )
     ])
 
     # Start map_server if this robot is assigned as the head robot and if there is no multi-robot,
