@@ -26,7 +26,7 @@ def generate_launch_description():
         name='robot_state_publisher',
         output='screen',
         namespace=robot_namespace,
-        parameters=[{'robot_description': robot_desc, 'frame_prefix': robot_namespace}],
+        parameters=[{'robot_description': robot_desc, 'frame_prefix': robot_namespace.perform(context) + "/"}],
         arguments=[urdf])
 
     relayboard = IncludeLaunchDescription(
