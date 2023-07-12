@@ -13,7 +13,8 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time', default='false') 
-    param_file_name = 'mapping.yaml'
+    namespace = LaunchConfiguration('robot_namespace', default='') 
+    param_file_name = 'mapping.yaml' #namespaced_mapping.yaml for the robots with namespaces
     param_dir = LaunchConfiguration(
         'parameters',
         default=os.path.join(
@@ -36,5 +37,5 @@ def generate_launch_description():
 
         Node(
             package='slam_toolbox', executable='sync_slam_toolbox_node', output='screen',
-            name='slam_toolbox', parameters = [param_dir])
+            name='slam_toolbox', namespace=namespace, parameters = [param_dir])
     ])
