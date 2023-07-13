@@ -1,7 +1,7 @@
 neo_localization2_node:
   ros__parameters:
-    base_frame: "base_footprint"
-    odom_frame: "odom"
+    base_frame: "/base_footprint"
+    odom_frame: "/odom"
     # exponential low pass gain for localization update (0 to 1)
     #   (higher gain means odometry is less used / relied on)
     update_gain: 0.5
@@ -72,11 +72,11 @@ neo_localization2_node:
 amcl:
   ros__parameters:
     use_sim_time: False
-    alpha1: 0.001
-    alpha2: 0.001
-    alpha3: 0.001
-    alpha4: 0.001
-    alpha5: 0.001
+    alpha1: 0.002
+    alpha2: 0.002
+    alpha3: 0.002
+    alpha4: 0.002
+    alpha5: 0.002
     base_frame_id: "base_link"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
@@ -86,19 +86,19 @@ amcl:
     lambda_short: 0.1
     set_initial_pose: false
     laser_likelihood_max_dist: 2.0
-    laser_max_range: -1.44
-    laser_min_range: 1.44
+    laser_max_range: -1.0
+    laser_min_range: -1.0
     laser_model_type: "likelihood_field"
-    max_beams: 200
-    max_particles: 2000
+    max_beams: 500
+    max_particles: 1250
     min_particles: 500
     odom_frame_id: "odom"
     pf_err: 0.05
-    pf_z: 0.99
+    pf_z: 0.01
     recovery_alpha_fast: 0.0
     recovery_alpha_slow: 0.0
     resample_interval: 2
-    robot_model_type: "differential"
+    robot_model_type: "omnidirectional"
     save_pose_rate: 0.5
     sigma_hit: 0.2
     tf_broadcast: true
@@ -109,14 +109,21 @@ amcl:
     # z_hit: 0.5
     # z_max: 0.05
     # z_rand: 0.5
-    # z_short: 0.05
+
+amcl_map_client:
+  ros__parameters:
+    use_sim_time: False
+
+amcl_rclcpp_node:
+  ros__parameters:
+    use_sim_time: False
 
 bt_navigator:
   ros__parameters:
     use_sim_time: False
     global_frame: map
-    robot_base_frame: base_link
-    odom_topic: /odom
+    robot_base_frame: robot1/base_link
+    odom_topic: /robot1/odom
     bt_loop_duration: 10
     default_nav_to_pose_bt_xml: "/home/neobotix/mp_400_workspace/src/neo_mp_400-2/configs/navigation/behavior_trees/navigate_to_pose_w_replanning_and_recovery.xml"
     default_nav_through_poses_bt_xml: "/home/neobotix/mp_400_workspace/src/neo_mp_400-2/configs/navigation/behavior_trees/navigate_through_poses_w_replanning_and_recovery.xml"
@@ -256,14 +263,21 @@ controller_server:
       min_stop_dist : 0.3
       # If robot has differential drive, holonomic otherwise
       differential_drive : true
+      # odom frame_id
+      local_frame: "/odom"
+      # base frame_id
+      base_frame: "/base_link"
+      # odom topic
+      odom_topic: "odom"
+
 
 local_costmap:
   local_costmap:
     ros__parameters:
       update_frequency: 10.0
       publish_frequency: 1.0
-      global_frame: odom
-      robot_base_frame: base_link
+      global_frame: robot1/odom
+      robot_base_frame: robot1/base_link
       footprint_padding: 0.
       footprint:  "[ [0.30,0.30],[-0.30,0.30],[-0.30,-0.3],[0.30,-0.3] ]"
       use_sim_time: False
@@ -280,9 +294,9 @@ local_costmap:
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
-        observation_sources: scan scan1
+        observation_sources: scan
         scan:
-          topic: /lidar_1/scan_filtered
+          topic: /robot1/lidar_1/scan_filtered
           max_obstacle_height: 2.0
           clearing: True
           marking: True
@@ -295,7 +309,8 @@ global_costmap:
       update_frequency: 0.4
       publish_frequency: 1.0
       global_frame: map
-      robot_base_frame: base_link
+      robot_base_frame: robot1/base_link
+      map_topic: /map
       footprint_padding: 0.0
       footprint:  "[ [0.30,0.30],[-0.30,0.30],[-0.30,-0.3],[0.30,-0.3] ]"
       use_sim_time: False
@@ -305,18 +320,9 @@ global_costmap:
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
-        observation_sources: scan scan1
+        observation_sources: scan
         scan:
-          topic: /lidar_1/scan_filtered
-          obstacle_max_range: 5.0
-          obstacle_min_range: 0.0
-          raytrace_max_range: 8.0
-          raytrace_min_range: 0.0
-          clearing: True
-          marking: True
-          data_type: "LaserScan"
-        scan1:
-          topic: /lidar_2/scan_filtered
+          topic: /robot1/lidar_1/scan_filtered
           obstacle_max_range: 5.0
           obstacle_min_range: 0.0
           raytrace_max_range: 8.0
@@ -360,17 +366,20 @@ planner_server:
 
 behavior_server:
   ros__parameters:
-    costmap_topic: local_costmap/costmap_raw
-    footprint_topic: local_costmap/published_footprint
+    costmap_topic: /robot1/local_costmap/costmap_raw
+    footprint_topic: /robot1/local_costmap/published_footprint
     cycle_frequency: 10.0
     behavior_plugins: ["wait"]
     wait:
       plugin: "nav2_behaviors/Wait"
-    global_frame: odom
-    robot_base_frame: base_link
+    global_frame: robot1/odom
+    robot_base_frame: robot1/base_link
     transform_timeout: 0.1
-    use_sim_time: true
     simulate_ahead_time: 2.0
+
+robot_state_publisher:
+  ros__parameters:
+    use_sim_time: False
 
 waypoint_follower:
   ros__parameters:
