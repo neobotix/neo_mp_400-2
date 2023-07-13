@@ -261,6 +261,8 @@ controller_server:
       local_frame: "/odom"
       # base frame_id
       base_frame: "/base_link"
+      # odom topic
+      odom_topic: "odom"
 
 local_costmap:
   local_costmap:
