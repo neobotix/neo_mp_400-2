@@ -117,7 +117,7 @@ Visualization Manager:
         Inertia: false
         Mass: false
       Name: RobotModel
-      TF Prefix: "robot1"
+      TF Prefix: <robot_namespace>
       Update Interval: 0
       Value: true
       Visual Enabled: true
