@@ -11,7 +11,7 @@ slam_toolbox:
 
     # ROS Parameters
     odom_frame: robot1/odom
-    map_frame: robot1/map
+    map_frame: map
     base_frame: robot1/base_footprint
     scan_topic: /robot1/lidar_1/scan_filtered
     mode: mapping #localization
