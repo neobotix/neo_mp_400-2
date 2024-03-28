@@ -87,17 +87,6 @@ def execution_stage(context: LaunchContext,
 
     launches.append(d435)
 
-    # Relaying lidar data to /scan topic
-    relay_topic_lidar1 = Node(
-            package='topic_tools',
-            executable = 'relay',
-            name='relay',
-			namespace =  robot_namespace,
-            output='screen',
-            parameters=[{'input_topic': robot_namespace.perform(context) + "lidar_1/scan_filtered",'output_topic': robot_namespace.perform(context) + "scan"}])
-
-    launches.append(relay_topic_lidar1)
-
     return launches
 
 def generate_launch_description():
