@@ -78,9 +78,9 @@ def execution_stage(context: LaunchContext,
     # TODO: Add support for namespacing
     d435 = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                os.path.join(get_package_share_directory('realsense2_camera'),
-                    'launch',
-                    'rs_launch.py')
+                os.path.join(get_package_share_directory('neo_mp_400-2'),
+                    'configs/realsense',
+                    'realsense_launch.py')
             ),
             condition=IfCondition(d435_enable)
         )
