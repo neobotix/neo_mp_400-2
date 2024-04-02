@@ -18,7 +18,7 @@ def generate_launch_description():
     head_robot = LaunchConfiguration('head_robot', default='False')
     use_amcl = LaunchConfiguration('use_amcl', default='False')
     use_sim_time = LaunchConfiguration('use_sim_time', default='False')
-    autostart = LaunchConfiguration('autostart', default='true')
+    autostart = LaunchConfiguration('autostart', default='True')
     namespace = LaunchConfiguration('namespace', default='')
     map_dir = LaunchConfiguration(
         'map',
@@ -44,8 +44,6 @@ def generate_launch_description():
             docking_param_file_name))
 
     nav2_launch_file_dir = os.path.join(get_package_share_directory('neo_nav2_bringup'), 'launch')
-
-    neo_docking2 = os.path.join(get_package_share_directory('neo_docking2'), 'launch')
 
     ld = LaunchDescription()
 
@@ -90,7 +88,9 @@ def generate_launch_description():
                               'params_file': docking_param_dir}.items()),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([neo_docking2, '/docking_launch.py']),
+            PythonLaunchDescriptionSource([os.path.join(
+                get_package_share_directory('neo_mp_400-2'), 'configs/navigation'
+                ), '/docking_launch.py']),
             condition=IfCondition(docking),
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time}.items(),
