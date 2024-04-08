@@ -1,0 +1,9 @@
+neo_usboard_v2_node:
+  ros__parameters:
+    can_id: 1024
+    # can_device: None
+    can_device: can0
+    serial_port: /dev/ttyUSB0
+    can_baud_rate: 1000000
+    update_rate: 5.0
+    topic_path: /usboard_v2
