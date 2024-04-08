@@ -25,11 +25,11 @@ def execution_stage(context: LaunchContext,
                     robot_namespace,
                     imu_enable,
                     d435_enable,
-                    uss5_enable):
+                    uss_enable):
     
     imu_enabl = str(imu_enable.perform(context))
     d435_enabl = str(d435_enable.perform(context))
-    uss5_enabl = str(uss5_enable.perform(context))
+    uss_enabl = str(uss_enable.perform(context))
 
     rp_ns = ""
     if (robot_namespace.perform(context) != "/"):
@@ -56,8 +56,8 @@ def execution_stage(context: LaunchContext,
             imu_enabl,
             " ", 'use_d435:=',
             d435_enabl,
-            " ", 'use_uss5:=',
-            uss5_enabl
+            " ", 'use_uss:=',
+            uss_enabl
             ]), 'frame_prefix': rp_ns}],
 		arguments=[urdf])
 
@@ -90,18 +90,6 @@ def execution_stage(context: LaunchContext,
         )
 
     launches.append(d435)
-    
-    # 7. USS5
-    uss5 = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                os.path.join(get_package_share_directory('neo_mp_400-2'),
-                    'configs/uss5',
-                    'uss5_launch.py')
-            ),
-            condition=IfCondition(uss5_enable)
-        )
-    
-    launches.append(uss5)
 
     return launches
 
@@ -112,9 +100,9 @@ def generate_launch_description():
     robot_namespace = LaunchConfiguration('robot_namespace')
     imu_enable = LaunchConfiguration('imu_enable')
     realsense_enable = LaunchConfiguration('d435_enable')
-    uss5_enable = LaunchConfiguration('uss5_enable')
+    uss_enable = LaunchConfiguration('uss_enable')
 
-    context_arguments = [robot_namespace, imu_enable, realsense_enable, uss5_enable]
+    context_arguments = [robot_namespace, imu_enable, realsense_enable, uss_enable]
 
     # Declare the launch arguments
     declare_namespace_cmd = DeclareLaunchArgument(
@@ -131,9 +119,9 @@ def generate_launch_description():
             description='Enable Realsense - Options: True/False'
         )
     
-    declare_uss5_cmd = DeclareLaunchArgument(
-            'uss5_enable', default_value='False',
-            description='Enable USS5 - Options: True/False'
+    declare_uss_cmd = DeclareLaunchArgument(
+            'uss_enable', default_value='False',
+            description='Enable uss - Options: True/False'
     )
     
     #  Launch hardware nodes
@@ -185,7 +173,7 @@ def generate_launch_description():
     ld.add_action(declare_namespace_cmd)
     ld.add_action(declare_imu_cmd)
     ld.add_action(declare_realsense_cmd)
-    ld.add_action(declare_uss5_cmd)
+    ld.add_action(declare_uss_cmd)
     ld.add_action(relayboard)
     ld.add_action(kinematics)
     ld.add_action(teleop)

@@ -3,11 +3,11 @@
   <!-- SENSORS -->
   <xacro:arg name="use_imu" default="false"/>
   <xacro:arg name="use_d435" default="false"/>
-  <xacro:arg name="use_uss5" default="false"/>
+  <xacro:arg name="use_uss" default="false"/>
 
   <xacro:property name="imu" value="$(arg use_imu)"/>
   <xacro:property name="d435" value="$(arg use_d435)"/>
-  <xacro:property name="uss5" value="$(arg use_uss5)"/>
+  <xacro:property name="uss" value="$(arg use_uss)"/>
 
   <link name="base_link"/>
   <joint name="base_footprint_joint" type="fixed">
@@ -243,31 +243,31 @@
     </joint>
   </xacro:if>
 
-  <xacro:if value="${uss5 == True}">
+  <xacro:if value="${uss == True}">
     <xacro:include filename="$(find neo_mp_400-2)/robot_model/mp_400/uss.xacro" />
 
     <xacro:us_sensor name="us_1" parent="base_link">
-      <origin xyz="0.266 0.157 0.280" rpy="0 3.14 3.14" />
+      <origin xyz="-0.266 0.157 0.280" rpy="0 0 2.617" />
     </xacro:us_sensor>
 
     <xacro:us_sensor name="us_2" parent="base_link">
-      <origin xyz="0.298 0 0.280" rpy="0 3.14 3.14" />
+      <origin xyz="-0.298 0 0.280" rpy="0 0 3.14" />
     </xacro:us_sensor>
 
     <xacro:us_sensor name="us_3" parent="base_link">
-      <origin xyz="0.266 -0.157 0.280" rpy="0 3.14 3.14" />
+      <origin xyz="-0.266 -0.157 0.280" rpy="0 0 3.665" />
     </xacro:us_sensor>
 
     <xacro:us_sensor name="us_4" parent="base_link">
-      <origin xyz="-0.266 0.157 0.280" rpy="0 3.14 3.14" />
+      <origin xyz="0.266 0.157 0.280" rpy="0 0 0.523" />
     </xacro:us_sensor>
 
     <xacro:us_sensor name="us_5" parent="base_link">
-      <origin xyz="-0.298 0 0.280" rpy="0 3.14 3.14" />
+      <origin xyz="0.298 0 0.280" rpy="0 0 0" />
     </xacro:us_sensor>
 
     <xacro:us_sensor name="us_6" parent="base_link">
-      <origin xyz="-0.266 -0.157 0.280" rpy="0 3.14 3.14" />
+      <origin xyz="0.266 -0.157 0.280" rpy="0 0 5.759" />
     </xacro:us_sensor>
 
   </xacro:if>
