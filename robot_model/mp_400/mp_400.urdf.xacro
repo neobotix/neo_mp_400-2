@@ -258,15 +258,15 @@
       <origin xyz="-0.266 -0.157 0.280" rpy="0 0 3.665" />
     </xacro:us_sensor>
 
-    <xacro:us_sensor name="us_4" parent="base_link">
+    <xacro:us_sensor name="us_9" parent="base_link">
       <origin xyz="0.266 0.157 0.280" rpy="0 0 0.523" />
     </xacro:us_sensor>
 
-    <xacro:us_sensor name="us_5" parent="base_link">
+    <xacro:us_sensor name="us_10" parent="base_link">
       <origin xyz="0.298 0 0.280" rpy="0 0 0" />
     </xacro:us_sensor>
 
-    <xacro:us_sensor name="us_6" parent="base_link">
+    <xacro:us_sensor name="us_11" parent="base_link">
       <origin xyz="0.266 -0.157 0.280" rpy="0 0 5.759" />
     </xacro:us_sensor>
 
