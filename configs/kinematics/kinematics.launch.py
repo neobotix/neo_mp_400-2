@@ -11,7 +11,7 @@ def generate_launch_description():
 
     return launch.LaunchDescription([
         launch_ros.actions.Node(
-            package='neo_kinematics_differential',
+            package='neo_kinematics_differential2',
             executable='neo_differential_node',
             output='screen',
             namespace = robot_namespace,
