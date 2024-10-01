@@ -11,7 +11,7 @@
     scale_linear_y: 0.0
 
     # low pass filter gain (1 = no filtering)
-    smooth_factor: 0.2
+    smooth_factor: 0.1
 
     # button on the controller wich has to be pushed while driving
     deadman_button: 5
