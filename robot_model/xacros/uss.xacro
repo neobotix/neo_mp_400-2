@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
+<!--
+Author: Pradheep Padmanabhan
+Contributor: Adarsh Karan K P
+-->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mp_400">
 
+  <!--Ultrasonic Sensor Macro-->
   <xacro:macro name="us_sensor" params="name parent *origin">
 
     <joint name="${name}_joint" type="fixed">
@@ -13,9 +18,17 @@
       <inertial>
         <mass value="0.001" />
         <origin xyz="0 0 0" rpy="0 0 0" />
-        <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.000001" iyz="0" izz="0.0001" />
+        <inertia 
+          ixx="0.0001" 
+          ixy="0" 
+          ixz="0" 
+          iyy="0.000001" 
+          iyz="0" 
+          izz="0.0001"
+          />
       </inertial>  
     </link>
+
   </xacro:macro>
   
 </robot>

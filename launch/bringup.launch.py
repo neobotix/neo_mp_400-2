@@ -1,5 +1,6 @@
 # Neobotix GmbH
 # Author: Pradheep Padmanabhan
+# Contributor: Adarsh Karan K P
 
 import launch
 import xacro
@@ -11,7 +12,6 @@ from launch import LaunchDescription
 from launch.actions import (
   DeclareLaunchArgument,
   IncludeLaunchDescription,
-  ExecuteProcess,
   OpaqueFunction
 )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -25,11 +25,14 @@ def execution_stage(context: LaunchContext,
                     robot_namespace,
                     imu_enable,
                     d435_enable,
-                    uss_enable):
+                    uss_enable,
+                    scanner_type):
     
     imu_enabl = str(imu_enable.perform(context))
     d435_enabl = str(d435_enable.perform(context))
     uss_enabl = str(uss_enable.perform(context))
+    scanner_typ = str(scanner_type.perform(context))
+    neo_mp_400 = get_package_share_directory('neo_mp_400-2')
 
     rp_ns = ""
     if (robot_namespace.perform(context) != "/"):
@@ -38,7 +41,7 @@ def execution_stage(context: LaunchContext,
     launches = []
 
     # Setting up the URDF
-    urdf = os.path.join(get_package_share_directory('neo_mp_400-2'),
+    urdf = os.path.join(neo_mp_400,
         'robot_model/mp_400',
         'mp_400.urdf.xacro')
     
@@ -51,22 +54,34 @@ def execution_stage(context: LaunchContext,
         namespace=robot_namespace,
         parameters=[{
             'robot_description': Command([
-            "xacro", " ", urdf,
-            " ", 'use_imu:=',
-            imu_enabl,
-            " ", 'use_d435:=',
-            d435_enabl,
-            " ", 'use_uss:=',
-            uss_enabl
-            ]), 'frame_prefix': rp_ns}],
-		arguments=[urdf])
+                "xacro", " ", urdf,
+                " ", 'use_imu:=', imu_enabl,
+                " ", 'use_d435:=', d435_enabl,
+                " ", 'use_uss:=', uss_enabl,
+                " ", 'scanner_type:=', scanner_typ,
+            ]),
+            'frame_prefix': rp_ns
+        }],
+        arguments=[urdf]
+        )
 
     launches.append(start_robot_state_publisher_cmd)
+
+    # 4. Laser
+    laser = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(neo_mp_400, 'configs/lidar/sick/s300', f'{scanner_typ}.launch.py')
+            ),
+            launch_arguments={
+                'namespace': robot_namespace
+            }.items()
+        )
+    launches.append(laser)
 
     # 5. IMU
     imu = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                os.path.join(get_package_share_directory('neo_mp_400-2'),
+                os.path.join(neo_mp_400,
                     'configs/phidget_imu',
                     'imu_launch.py')
             ),
@@ -82,7 +97,7 @@ def execution_stage(context: LaunchContext,
     # TODO: Add support for namespacing
     d435 = IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
-                os.path.join(get_package_share_directory('neo_mp_400-2'),
+                os.path.join(neo_mp_400,
                     'configs/realsense',
                     'realsense_launch.py')
             ),
@@ -101,12 +116,14 @@ def generate_launch_description():
     imu_enable = LaunchConfiguration('imu_enable')
     realsense_enable = LaunchConfiguration('d435_enable')
     uss_enable = LaunchConfiguration('uss_enable')
+    scanner_type = LaunchConfiguration('scanner_type')
 
-    context_arguments = [robot_namespace, imu_enable, realsense_enable, uss_enable]
+    context_arguments = [robot_namespace, imu_enable, realsense_enable, uss_enable, scanner_type]
 
     # Declare the launch arguments
     declare_namespace_cmd = DeclareLaunchArgument(
-            'robot_namespace', default_value='', description='Top-level namespace'
+            'robot_namespace', default_value='', 
+            description='Top-level namespace'
         )
     
     declare_imu_cmd = DeclareLaunchArgument(
@@ -122,7 +139,13 @@ def generate_launch_description():
     declare_uss_cmd = DeclareLaunchArgument(
             'uss_enable', default_value='False',
             description='Enable uss - Options: True/False'
-    )
+        )
+
+    declare_scanner_type_cmd = DeclareLaunchArgument(
+            'scanner_type', default_value='sick_s300',
+            choices=['', 'sick_s300', 'sick_microscan3'],
+            description='Type of laser scanner to use'
+        )
     
     #  Launch hardware nodes
     # 1. Relayboard
@@ -154,17 +177,6 @@ def generate_launch_description():
                 'namespace': robot_namespace
             }.items()
         )
-
-    # 4. Laser
-    # TODO: Add support for MicroScan3
-    laser = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                os.path.join(neo_mp_400, 'configs/lidar/sick/s300', 'sick_s300.launch.py')
-            ),
-            launch_arguments={
-                'namespace': robot_namespace
-            }.items()
-        )
     
     # Opaque function for configuring URDF, IMU, Realsense and the USBoard
     opq_function = OpaqueFunction(function=execution_stage, args=context_arguments)
@@ -174,10 +186,10 @@ def generate_launch_description():
     ld.add_action(declare_imu_cmd)
     ld.add_action(declare_realsense_cmd)
     ld.add_action(declare_uss_cmd)
+    ld.add_action(declare_scanner_type_cmd)
     ld.add_action(relayboard)
     ld.add_action(kinematics)
     ld.add_action(teleop)
     ld.add_action(opq_function)
-    ld.add_action(laser)
 
     return ld

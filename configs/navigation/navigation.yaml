@@ -68,7 +68,9 @@ neo_localization2_node:
     particle_cloud: particlecloud
     # amcl_pose topic
     amcl_pose: amcl_pose
-
+    # set init_pose
+    set_initial_pose: true
+    
 amcl:
   ros__parameters:
     use_sim_time: False
@@ -111,6 +113,14 @@ amcl:
     # z_rand: 0.5
     # z_short: 0.05
 
+amcl_map_client:
+  ros__parameters:
+    use_sim_time: False
+
+amcl_rclcpp_node:
+  ros__parameters:
+    use_sim_time: False
+
 bt_navigator:
   ros__parameters:
     use_sim_time: False
@@ -137,6 +147,7 @@ controller_server:
     # controller server parameters (see Controller Server for more info)
     use_sim_time: False
     controller_frequency: 100.0
+    odom_topic: "odom"
     min_x_velocity_threshold: 0.001
     min_y_velocity_threshold: 0.5
     min_theta_velocity_threshold: 0.001
@@ -154,7 +165,7 @@ controller_server:
       stateful: True
     # neo_local_planner controller parameters
     FollowPath:
-      plugin: "neo_local_planner::NeoLocalPlanner"
+      plugin: "neo_local_planner2::NeoLocalPlanner"
       # The x acceleration limit of the robot in meters/sec^2
        # The x acceleration limit of the robot in meters/sec^2
       acc_lim_x : 0.25
@@ -238,7 +249,7 @@ local_costmap:
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
-        observation_sources: scan scan1
+        observation_sources: scan
         scan:
           topic: /lidar_1/scan_filtered
           max_obstacle_height: 2.0
@@ -257,24 +268,14 @@ global_costmap:
       footprint_padding: 0.0
       footprint:  "[ [0.30,0.30],[-0.30,0.30],[-0.30,-0.3],[0.30,-0.3] ]"
       use_sim_time: False
-      # robot_radius: 0.22
       resolution: 0.05
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: True
-        observation_sources: scan scan1
+        observation_sources: scan
         scan:
           topic: /lidar_1/scan_filtered
-          obstacle_max_range: 5.0
-          obstacle_min_range: 0.0
-          raytrace_max_range: 8.0
-          raytrace_min_range: 0.0
-          clearing: True
-          marking: True
-          data_type: "LaserScan"
-        scan1:
-          topic: /lidar_2/scan_filtered
           obstacle_max_range: 5.0
           obstacle_min_range: 0.0
           raytrace_max_range: 8.0
@@ -291,11 +292,17 @@ global_costmap:
         cost_scaling_factor: 4.5
         inflation_radius: 0.8
       always_send_full_costmap: True
+  global_costmap_client:
+    ros__parameters:
+      use_sim_time: False
+  global_costmap_rclcpp_node:
+    ros__parameters:
+      use_sim_time: False
 
 map_server:
   ros__parameters:
     use_sim_time: False
-    yaml_filename: "test.yaml"
+    yaml_filename: "neo_workshop.yaml"
 
 map_saver:
   ros__parameters:
@@ -329,6 +336,10 @@ behavior_server:
     transform_timeout: 0.1
     use_sim_time: true
     simulate_ahead_time: 2.0
+
+robot_state_publisher:
+  ros__parameters:
+    use_sim_time: False
 
 waypoint_follower:
   ros__parameters:
