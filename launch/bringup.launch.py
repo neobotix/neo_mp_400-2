@@ -10,10 +10,10 @@ from pathlib import Path
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import (
-  DeclareLaunchArgument,
-  IncludeLaunchDescription,
-  OpaqueFunction
-)
+    DeclareLaunchArgument,
+    IncludeLaunchDescription,
+    OpaqueFunction
+    )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, Command
 from launch_ros.actions import Node
@@ -27,7 +27,7 @@ def execution_stage(context: LaunchContext,
                     d435_enable,
                     uss_enable,
                     scanner_type):
-    
+
     imu_enabl = str(imu_enable.perform(context))
     d435_enabl = str(d435_enable.perform(context))
     uss_enabl = str(uss_enable.perform(context))
@@ -44,7 +44,7 @@ def execution_stage(context: LaunchContext,
     urdf = os.path.join(neo_mp_400,
         'robot_model/mp_400',
         'mp_400.urdf.xacro')
-    
+
     # Start robot state publisher
     start_robot_state_publisher_cmd = Node(
         package='robot_state_publisher',
@@ -90,7 +90,7 @@ def execution_stage(context: LaunchContext,
             }.items(),
             condition=IfCondition(imu_enable)
         )
-    
+
     launches.append(imu)
 
     # 6. D435
@@ -125,17 +125,17 @@ def generate_launch_description():
             'robot_namespace', default_value='', 
             description='Top-level namespace'
         )
-    
+
     declare_imu_cmd = DeclareLaunchArgument(
             'imu_enable', default_value='False',
             description='Enable IMU - Options: True/False'
         )
-    
+
     declare_realsense_cmd = DeclareLaunchArgument(
             'd435_enable', default_value='False',
             description='Enable Realsense - Options: True/False'
         )
-    
+
     declare_uss_cmd = DeclareLaunchArgument(
             'uss_enable', default_value='False',
             description='Enable uss - Options: True/False'
@@ -146,7 +146,7 @@ def generate_launch_description():
             choices=['', 'sick_s300', 'sick_microscan3'],
             description='Type of laser scanner to use'
         )
-    
+
     #  Launch hardware nodes
     # 1. Relayboard
     relayboard = IncludeLaunchDescription(
@@ -177,7 +177,7 @@ def generate_launch_description():
                 'namespace': robot_namespace
             }.items()
         )
-    
+
     # Opaque function for configuring URDF, IMU, Realsense and the USBoard
     opq_function = OpaqueFunction(function=execution_stage, args=context_arguments)
 
