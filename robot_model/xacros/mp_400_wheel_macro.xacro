@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+Author: Pradheep Padmanabhan
+Contributor: Adarsh Karan K P
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="mp_400">
+
+  <!--Wheel Macro-->
+  <xacro:macro name="mp_400_fixed_wheel" params="
+    wheel_prefix 
+    parent_link
+    *origin
+    wheel_joint_type
+    visual_origin_rpy
+    ">
+
+    <!--wheel joint-->
+  <joint name="${wheel_prefix}_joint" type="${wheel_joint_type}">
+      <xacro:insert_block name="origin"/>
+      <axis xyz="-1 0 0"/>
+      <dynamics damping="10" friction="100"/>
+      <limit effort="1000.0" lower="-1e+16" upper="1e+16" velocity="100"/>
+      <parent link="${parent_link}"/>
+      <child link="${wheel_prefix}_link"/>
+    </joint>
+
+    <!--wheel link-->
+    <link name="${wheel_prefix}_link" type="wheel">
+      <inertial>
+        <mass value="1.82362"/>
+        <inertia 
+          ixx="0.00399743171" 
+          ixy="0.00000004464" 
+          ixz="-0.00000002245" 
+          iyy="0.00399741733" 
+          iyz="-0.00000000164" 
+          izz="0.00739239692"
+          />
+      </inertial>
+      <visual>
+        <origin rpy="${visual_origin_rpy}" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="package://neo_mp_400-2/robot_model/meshes/MP-400-FIXED-WHEEL.dae" scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <sphere radius="0.0760"/>
+        </geometry>
+      </collision>
+    </link>
+
+  </xacro:macro>
+
+</robot>
