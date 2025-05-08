@@ -38,7 +38,7 @@ def execution_stage(context: LaunchContext,
     if (robot_namespace.perform(context) != "/"):
         rp_ns = robot_namespace.perform(context) + "/"
 
-    launches = []
+    launch_actions = []
 
     # Setting up the URDF
     urdf = os.path.join(neo_mp_400,
@@ -65,7 +65,7 @@ def execution_stage(context: LaunchContext,
         arguments=[urdf]
         )
 
-    launches.append(start_robot_state_publisher_cmd)
+    launch_actions.append(start_robot_state_publisher_cmd)
 
     # 4. Laser
     laser = IncludeLaunchDescription(
@@ -76,7 +76,7 @@ def execution_stage(context: LaunchContext,
                 'namespace': robot_namespace
             }.items()
         )
-    launches.append(laser)
+    launch_actions.append(laser)
 
     # 5. IMU
     imu = IncludeLaunchDescription(
@@ -91,7 +91,7 @@ def execution_stage(context: LaunchContext,
             condition=IfCondition(imu_enable)
         )
 
-    launches.append(imu)
+    launch_actions.append(imu)
 
     # 6. D435
     # TODO: Add support for namespacing
@@ -104,9 +104,9 @@ def execution_stage(context: LaunchContext,
             condition=IfCondition(d435_enable)
         )
 
-    launches.append(d435)
+    launch_actions.append(d435)
 
-    return launches
+    return launch_actions
 
 def generate_launch_description():
     neo_mp_400 = get_package_share_directory('neo_mp_400-2')
