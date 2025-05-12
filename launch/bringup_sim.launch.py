@@ -20,7 +20,7 @@ def execution_stage(context: LaunchContext,
                     imu_enable,
                     d435_enable,
                     uss_enable,
-                    scanner_type):    
+                    scanner_type):
 
     launch_actions = []
 
