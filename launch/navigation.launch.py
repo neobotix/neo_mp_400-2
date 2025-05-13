@@ -21,7 +21,7 @@ def execution_stage(
         context: LaunchContext,
         use_sim_time,
         autostart, namespace, use_multi_robots,
-        head_robot, use_amcl, map_dir, 
+        head_robot, use_amcl, map_dir,
         param_dir, use_rviz, docking):
 
     launch_actions = []
@@ -44,7 +44,7 @@ def execution_stage(
 
     nav2_launch_file_dir = os.path.join(get_package_share_directory('neo_nav2_bringup'), 'launch')
 
-    # Start navigation and push namespace if and only if the multi robot scenario is set to true. 
+    # Start navigation and push namespace if and only if the multi robot scenario is set to true.
     start_navigation = GroupAction([
         PushRosNamespace(
             condition=IfCondition(use_multi_robots),
@@ -126,12 +126,12 @@ def generate_launch_description():
     docking = LaunchConfiguration('enable_docking')
 
     declare_use_sim_time_cmd = DeclareLaunchArgument(
-            'use_sim_time', default_value='false',
+            'use_sim_time', default_value='False',
             description='Use simulation clock if true'
         )
 
     declare_autostart_cmd = DeclareLaunchArgument(
-            'autostart', default_value='true',
+            'autostart', default_value='True',
             description='Automatically start the nav2 stack'
         )
 
