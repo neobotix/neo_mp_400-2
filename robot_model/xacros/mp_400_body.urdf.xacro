@@ -43,7 +43,7 @@ Contributor: Adarsh Karan K P
 
     <!-- Caster Wheel-->
     <xacro:mp_400_caster_wheel 
-      wheel_prefix="mp_400_caster_wheel_front_left"
+      wheel_prefix="caster_wheel_front_left"
       parent_link="base_link" 
       wheel_joint_type="fixed"
       >
@@ -51,7 +51,7 @@ Contributor: Adarsh Karan K P
     </xacro:mp_400_caster_wheel>
 
     <xacro:mp_400_caster_wheel 
-      wheel_prefix="mp_400_caster_wheel_back_left"
+      wheel_prefix="caster_wheel_back_left"
       parent_link="base_link" 
       wheel_joint_type="fixed"
       >
@@ -59,7 +59,7 @@ Contributor: Adarsh Karan K P
     </xacro:mp_400_caster_wheel>
 
     <xacro:mp_400_caster_wheel 
-      wheel_prefix="mp_400_caster_wheel_front_right"
+      wheel_prefix="caster_wheel_front_right"
       parent_link="base_link" 
       wheel_joint_type="fixed"
       >
@@ -67,7 +67,7 @@ Contributor: Adarsh Karan K P
     </xacro:mp_400_caster_wheel>
 
     <xacro:mp_400_caster_wheel 
-      wheel_prefix="mp_400_caster_wheel_back_right"
+      wheel_prefix="caster_wheel_back_right"
       parent_link="base_link" 
       wheel_joint_type="fixed"
       >
@@ -76,7 +76,7 @@ Contributor: Adarsh Karan K P
 
     <!-- Wheels-->
     <xacro:mp_400_fixed_wheel 
-      wheel_prefix="mp_400_fixed_wheel_right"
+      wheel_prefix="fixed_wheel_right"
       parent_link="base_link" 
       wheel_joint_type="revolute"
       visual_origin_rpy="0 0 3.14"
@@ -85,7 +85,7 @@ Contributor: Adarsh Karan K P
     </xacro:mp_400_fixed_wheel>
 
     <xacro:mp_400_fixed_wheel 
-      wheel_prefix="mp_400_fixed_wheel_left"
+      wheel_prefix="fixed_wheel_left"
       parent_link="base_link" 
       wheel_joint_type="revolute"
       visual_origin_rpy="0 0 0"
