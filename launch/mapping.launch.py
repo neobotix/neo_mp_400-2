@@ -37,15 +37,15 @@ def generate_launch_description():
     slam_params_file = LaunchConfiguration('slam_params_file')
 
     declare_autostart_cmd = DeclareLaunchArgument(
-        'autostart', default_value='true',
+        'autostart', default_value='True',
         description='Automatically startup the slamtoolbox. '
                     'Ignored when use_lifecycle_manager is true.')
     declare_use_lifecycle_manager = DeclareLaunchArgument(
-        'use_lifecycle_manager', default_value='false',
+        'use_lifecycle_manager', default_value='False',
         description='Enable bond connection during node activation')
     declare_use_sim_time_argument = DeclareLaunchArgument(
         'use_sim_time',
-        default_value='false',
+        default_value='False',
         description='Use simulation/Gazebo clock')
     declare_slam_params_file_cmd = DeclareLaunchArgument(
         'slam_params_file',
