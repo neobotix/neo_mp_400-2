@@ -17,7 +17,7 @@ from launch.actions import (
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, Command
 from launch_ros.actions import Node
-
+from launch_ros.descriptions import ParameterValue
 from launch.launch_context import LaunchContext
 from launch.conditions import IfCondition
 
@@ -53,17 +53,17 @@ def execution_stage(context: LaunchContext,
         output='screen',
         namespace=robot_namespace,
         parameters=[{
-            'robot_description': Command([
+            'robot_description': ParameterValue(Command([
                 "xacro", " ", urdf,
                 " ", 'use_imu:=', imu_enabl,
                 " ", 'use_d435:=', d435_enabl,
                 " ", 'use_uss:=', uss_enabl,
                 " ", 'scanner_type:=', scanner_typ,
-            ]),
+            ]), value_type=str),
             'frame_prefix': rp_ns
         }],
         arguments=[urdf]
-        )
+    )
 
     launch_actions.append(start_robot_state_publisher_cmd)
 
@@ -105,6 +105,16 @@ def execution_stage(context: LaunchContext,
         )
 
     launch_actions.append(d435)
+
+    relay_topic_joint_states = Node(
+        package='topic_tools',
+        executable='relay',
+        name='relay_joint_states',
+        output='screen',
+        parameters=[{'input_topic': "drives/joint_states",'output_topic': "joint_states"}]
+    )
+
+    launch_actions.append(relay_topic_joint_states)
 
     return launch_actions
 
