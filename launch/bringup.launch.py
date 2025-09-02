@@ -42,7 +42,7 @@ def execution_stage(context: LaunchContext,
 
     # Setting up the URDF
     urdf = os.path.join(neo_mp_400,
-        'robot_model/mp_400',
+        'robot_model',
         'mp_400.urdf.xacro')
 
     # Start robot state publisher
